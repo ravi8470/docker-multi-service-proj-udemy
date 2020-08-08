@@ -18,7 +18,9 @@ after_success:
   - docker build -t ravidocker22/stephen-udemy-multicont-docker-server ./server
   - docker build -t ravidocker22/stephen-udemy-multicont-docker-worker ./worker
   #login to the docker cli
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --pasword-stdin
+  #- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --pasword-stdin
+  - docker login -u "$DOCKER_ID" -p "$DOCKER_PASSWORD" docker.io
+
   #push images to docker hub
   - docker push ravidocker22/stephen-udemy-multicont-docker-client
   - docker push ravidocker22/stephen-udemy-multicont-docker-nginx
