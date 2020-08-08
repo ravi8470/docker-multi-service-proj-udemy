@@ -1,0 +1,26 @@
+language: generic
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t ravidocker22/react-test -f ./client/Dockerfile.dev ./client
+
+#this is the main test running section.
+#any process that returns with non zero exit code will cause build to fail.
+script:
+  - docker run -e CI=true ravidocker22/react-test npm run test -- --coverage
+
+after_success:
+  - docker build -t ravidocker22/stephen-udemy-multicont-docker-client ./client
+  - docker build -t ravidocker22/stephen-udemy-multicont-docker-nginx ./nginx
+  - docker build -t ravidocker22/stephen-udemy-multicont-docker-server ./server
+  - docker build -t ravidocker22/stephen-udemy-multicont-docker-worker ./worker
+  #login to the docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --pasword-stdin
+  #push images to docker hub
+  - docker push ravidocker22/stephen-udemy-multicont-docker-client
+  - docker push ravidocker22/stephen-udemy-multicont-docker-nginx
+  - docker push ravidocker22/stephen-udemy-multicont-docker-server
+  - docker push ravidocker22/stephen-udemy-multicont-docker-worker
