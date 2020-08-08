@@ -2,6 +2,8 @@ version: "3"
 services:
   postgres:
     image: "postgres:latest"
+    environment:
+      - POSTGRES_PASSWORD=password
   redis:
     image: "redis:latest"
   nginx:
@@ -13,6 +15,8 @@ services:
     ports:
       - "3050:80"
   api:
+    depends_on:
+      - postgres
     build:
       context: ./server
       dockerfile: Dockerfile.dev
@@ -25,9 +29,10 @@ services:
       - PGUSER=postgres
       - PGHOST=postgres
       - PGDATABASE=postgres
-      - PGPASSWORD=postgres_password
+      - PGPASSWORD=password
       - PGPORT=5432
   client:
+    stdin_open: true
     build:
       context: ./client
       dockerfile: Dockerfile.dev
@@ -41,3 +46,6 @@ services:
     volumes:
       - /app/node_modules
       - ./worker:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
