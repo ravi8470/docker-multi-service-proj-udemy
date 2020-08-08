@@ -26,3 +26,14 @@ after_success:
   - docker push ravidocker22/stephen-udemy-multicont-docker-nginx
   - docker push ravidocker22/stephen-udemy-multicont-docker-server
   - docker push ravidocker22/stephen-udemy-multicont-docker-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-south-1"
+  env: "MultiDocker-env"
+  app: "multi-docker"
+  #bucket_name is the s3 bucket where travis is going to put the zip of all our files
+  bucket_name: "elasticbeanstalk-ap-south-1-652320584847"
+  bucker_path: "docker-multi"
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
