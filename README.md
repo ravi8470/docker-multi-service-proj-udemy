@@ -1,0 +1,1 @@
+basic docker setup for dev and prod env for a project with react front end and node backend with postgres DB, a worker process (to calc fibonacci sequence based on a subscription from the redis store and put the result of fibonacci back into redis store) and a redis service.
